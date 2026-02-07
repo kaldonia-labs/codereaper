@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - CodeReaper Test App</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 640px; margin: 40px auto; padding: 0 20px; }
+        h1 { font-size: 28px; margin-bottom: 24px; color: #1a1a1a; }
+        .input-row { display: flex; gap: 8px; margin-bottom: 24px; }
+        .input-row input { flex: 1; padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; }
+        .input-row button { padding: 10px 20px; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-size: 15px; cursor: pointer; }
+        .input-row button:hover { background: #1d4ed8; }
+        .task-list { list-style: none; }
+        .task-item { background: #fff; padding: 12px 16px; margin-bottom: 8px; border-radius: 6px; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        .task-item.done span { text-decoration: line-through; color: #999; }
+        .task-item input[type=checkbox] { width: 18px; height: 18px; }
+        .task-item span { flex: 1; font-size: 15px; }
+        .task-item button { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 18px; padding: 4px; }
+        .filters { display: flex; gap: 8px; margin-bottom: 16px; }
+        .filters button { padding: 6px 14px; border: 1px solid #ddd; background: #fff; border-radius: 6px; cursor: pointer; font-size: 13px; }
+        .filters button.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .stats { margin-top: 16px; font-size: 13px; color: #666; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 10; }
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #fff; padding: 24px; border-radius: 10px; z-index: 11; min-width: 300px; display: none; }
+        .modal h2 { margin-bottom: 16px; }
+        .modal button { margin-top: 12px; padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <div class="input-row">
+            <input type="text" id="taskInput" placeholder="Add a new task..." />
+            <button id="addBtn" onclick="addTask()">Add</button>
+        </div>
+        <div class="filters">
+            <button class="active" onclick="setFilter('all', this)">All</button>
+            <button onclick="setFilter('active', this)">Active</button>
+            <button onclick="setFilter('done', this)">Done</button>
+        </div>
+        <ul class="task-list" id="taskList"></ul>
+        <div class="stats" id="stats"></div>
+        <br>
+        <button onclick="openModal()">About</button>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+    <div class="modal" id="aboutModal">
+        <h2>About Task Manager</h2>
+        <p>A simple task manager for testing CodeReaper dead code detection.</p>
+        <button onclick="closeModal()">Close</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

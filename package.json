@@ -1,0 +1,17 @@
+{
+  "name": "codereaper",
+  "version": "0.1.0",
+  "description": "AI-driven JavaScript dead code elimination for Cursor (MCP server)",
+  "keywords": ["mcp", "cursor", "dead-code", "javascript", "coverage"],
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "codereaper": "./bin/cli.mjs"
+  },
+  "files": [
+    "bin/"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
