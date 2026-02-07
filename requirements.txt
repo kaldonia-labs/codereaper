@@ -1,3 +1,2 @@
-# For development: install the package with all extras.
-# Prefer: pip install -e ".[all]"
--e ".[all]"
+# For development: install the package in editable mode.
+-e .
