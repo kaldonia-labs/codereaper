@@ -28,9 +28,9 @@ npx codereaper               # auto-detects uvx/pipx/python
 ### From source
 
 ```bash
-git clone https://github.com/your-org/codereaper.git
+git clone https://github.com/kaldonia-labs/codereaper.git
 cd codereaper
-pip install -e ".[all]"
+pip install -e .
 playwright install chromium
 ```
 
@@ -146,51 +146,20 @@ Provide a local source directory so the report maps URLs to local files:
 | `list_scans` | List recent scans. |
 | `get_scan_status` | Get detailed status of a scan. |
 
-## REST API
-
-CodeReaper also exposes a REST API via FastAPI for programmatic access.
-
-### Start the API server
-
-```bash
-codereaper-api                                          # console script
-python -m codereaper.api                                # module
-uvicorn codereaper.api.app:app --reload --port 8000     # uvicorn directly
-```
-
-API docs at [http://localhost:8000/docs](http://localhost:8000/docs).
-
-### Endpoints
-
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| `POST` | `/api/v1/scans` | Start scan + exploration |
-| `GET` | `/api/v1/scans/{scanId}` | Scan status & results |
-| `GET` | `/api/v1/scans/{scanId}/stream` | SSE progress stream |
-| `POST` | `/api/v1/scans/{scanId}/analyze` | Analyze dead code candidates |
-| `POST` | `/api/v1/scans/{scanId}/patches` | Generate patch proposals |
-| `GET` | `/api/v1/patches/{patchId}` | Retrieve patch details / diffs |
-| `POST` | `/api/v1/patches/{patchId}/apply` | Apply patch (requires confirm) |
-| `POST` | `/api/v1/patches/{patchId}/verify` | Verify patch via replay |
-| `GET` | `/api/v1/patches/{patchId}/verify/stream` | SSE verification progress |
-| `POST` | `/api/v1/patches/{patchId}/rollback` | Rollback to pre-patch state |
-| `GET` | `/api/v1/health` | Health check |
-
 ## Architecture
 
 ```
-Cursor (MCP)  /  CLI  /  REST client
-        |                    |
-   MCP Server           FastAPI Server
-   (codereaper.mcp)     (codereaper.api)
-        \                  /
-         \                /
-      Shared Services Layer
-      (scanner, analyzer, patcher, verifier)
-              |                |
-    Index Browser Agent    V8 CDP Coverage
-    (autonomous UI         (precise per-function
-     exploration)           execution counts)
+Cursor / AI assistant
+        |
+   MCP Server (stdio)
+   (codereaper.mcp)
+        |
+   Services Layer
+   (scanner, analyzer, patcher, verifier)
+        |               |
+  Index Browser Agent  V8 CDP Coverage
+  (autonomous UI       (precise per-function
+   exploration)         execution counts)
 ```
 
 ## Pipeline
@@ -211,15 +180,8 @@ codereaper/
 ├── mcp/                     # MCP server for Cursor
 │   ├── __init__.py          # main() entry point
 │   ├── __main__.py          # python -m codereaper.mcp
-│   └── server.py            # FastMCP tools
-├── api/                     # REST API (FastAPI)
-│   ├── __init__.py          # main() entry point
-│   ├── __main__.py          # python -m codereaper.api
-│   ├── app.py               # FastAPI app, lifespan, CORS
-│   └── routers/
-│       ├── scans.py         # Scan + analyze endpoints
-│       └── patches.py       # Patch + verify + rollback endpoints
-├── services/                # Shared business logic
+│   └── server.py            # FastMCP tool definitions
+├── services/                # Business logic
 │   ├── scanner.py           # Index agent orchestration + CDP coverage
 │   ├── analyzer.py          # Coverage mapping + dead code detection
 │   ├── patcher.py           # Diff generation + application + rollback
@@ -229,8 +191,7 @@ codereaper/
 │   └── enums.py             # Status, risk, safety enums
 ├── core/
 │   ├── config.py            # Settings via pydantic-settings
-│   ├── storage.py           # SQLite + filesystem artifact storage
-│   └── sse.py               # SSE event helpers + channel
+│   └── storage.py           # SQLite + filesystem artifact storage
 └── tests/
 
 bin/cli.mjs                  # npx wrapper (spawns uvx/pipx/python)
@@ -241,10 +202,8 @@ package.json                 # npm packaging (npx codereaper)
 ## Tech Stack
 
 - **MCP Server**: FastMCP
-- **REST Server**: FastAPI + Uvicorn
 - **Validation**: Pydantic v2
 - **Storage**: aiosqlite + filesystem
 - **Browser**: Playwright (via Index agent)
 - **Coverage**: V8 CDP Profiler domain
 - **Diff**: Python `difflib`
-- **SSE**: `StreamingResponse` with `text/event-stream`

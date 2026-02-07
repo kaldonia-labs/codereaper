@@ -29,23 +29,9 @@ dependencies = [
     "playwright>=1.49.0",
 ]
 
-[project.optional-dependencies]
-api = [
-    "fastapi>=0.115.0",
-    "uvicorn[standard]>=0.32.0",
-    "sse-starlette>=2.2.0",
-]
-all = [
-    "codereaper[api]",
-    "lmnr[all]>=0.5.0",
-    "typer>=0.15.0",
-    "rich>=13.9.0",
-]
-
 [project.scripts]
 codereaper = "codereaper.mcp:main"
 codereaper-mcp = "codereaper.mcp:main"
-codereaper-api = "codereaper.api:main"
 
 [project.urls]
 Homepage = "https://github.com/kaldonia/codereaper"
