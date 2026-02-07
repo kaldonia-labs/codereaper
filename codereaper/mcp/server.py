@@ -18,6 +18,7 @@ from urllib.parse import urlparse
 from fastmcp import FastMCP
 
 from codereaper.core.config import Settings, get_settings
+from codereaper.core.unbound_llm import unbound_ping as _unbound_ping
 from codereaper.core.storage import Storage
 from codereaper.models.enums import SafetyMode, ScanStatus
 from codereaper.models.schemas import Candidate
@@ -221,6 +222,12 @@ def _format_report(
 # ---------------------------------------------------------------------------
 # Tools
 # ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+async def unbound_ping() -> str:
+    """Ping the Unbound API (getunbound.ai). Returns the model reply; expect 'UNBOUND_OK' if the API key and model work."""
+    return await _unbound_ping()
 
 
 @mcp.tool()
