@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log
+yarn.lock
+
+# Python / Django / Flask
+__pycache__/
+*.pyc
+.env
+venv/
+.env.local
+
+# Build
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
