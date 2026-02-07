@@ -1,8 +1,8 @@
 # CodeReaper
 
-AI-driven JavaScript dead code elimination for websites and Chrome extensions.
+AI-driven Cursor MCP JavaScript dead code elimination for websites.
 
-CodeReaper scans a target URL or unpacked Chrome extension, autonomously explores the UI via the [Index](https://github.com/lmnr-ai/index) browser agent, collects V8 precise coverage data, and produces verified unified diffs that safely remove dead code.
+It's added to Cursor as MCP using pip install codereaper. CodeReaper scans a target URL or unpacked Chrome extension, autonomously explores the UI via the [Index](https://github.com/lmnr-ai/index) browser agent, collects V8 precise coverage data, and produces verified unified diffs that safely remove dead code.
 
 ## Install
 
@@ -33,6 +33,11 @@ cd codereaper
 pip install -e .
 playwright install chromium
 ```
+
+## Landing
+
+Codereaper Landing [codereaper.vercel.app](https://codereaper.vercel.app/)  
+See what codereaper is!
 
 ## Configure
 
