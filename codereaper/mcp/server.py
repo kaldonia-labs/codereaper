@@ -603,3 +603,15 @@ async def get_scan_status(scan_id: str) -> str:
         return f"Error: Scan '{scan_id}' not found."
 
     return json.dumps(scan, indent=2, default=str)
+
+@mcp.tool()
+async def unbound_status() -> str:
+    """
+    Shows whether CodeReaper is running in an Unbound-governed environment.
+    (Cursor integration sets UNBOUND_* env vars.)
+    """
+    keys = {
+        "UNBOUND_API_KEY_set": bool(os.environ.get("UNBOUND_API_KEY")),
+        "UNBOUND_BASE_URL": os.environ.get("UNBOUND_BASE_URL", ""),
+    }
+    return json.dumps(keys, indent=2)

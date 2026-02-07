@@ -204,6 +204,17 @@ pyproject.toml               # Python packaging (pip install codereaper)
 package.json                 # npm packaging (npx codereaper)
 ```
 
+
+
+
+## Governance (Unbound)
+
+We integrate Unbound as a governance layer for AI coding agents in Cursor.
+Cursor routes LLM traffic (Gemini) through Unbound’s gateway, enabling monitoring
+and policy guardrails during MCP tool usage.
+
+
+
 ## Tech Stack
 
 - **MCP Server**: FastMCP
@@ -212,3 +223,6 @@ package.json                 # npm packaging (npx codereaper)
 - **Browser**: Playwright (via Index agent)
 - **Coverage**: V8 CDP Profiler domain
 - **Diff**: Python `difflib`
+
+
+
