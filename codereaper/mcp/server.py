@@ -9,13 +9,19 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import sys
 import uuid
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from dotenv import load_dotenv
 from fastmcp import FastMCP
+
+# Load .env into os.environ so third-party libs (e.g. GeminiProvider)
+# can pick up API keys without extra wiring.
+load_dotenv()
 
 from codereaper.core.config import Settings, get_settings
 from codereaper.core.unbound_llm import unbound_ping as _unbound_ping

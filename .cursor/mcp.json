@@ -1,9 +1,9 @@
 {
   "mcpServers": {
     "codereaper": {
-      "command": "/Users/dijarselami/Desktop/Kaldonia-Labs/code-reaper/codereaper/.venv/bin/python",
+      "command": "python3",
       "args": ["-m", "codereaper.mcp"],
-      "cwd": "/Users/dijarselami/Desktop/Kaldonia-Labs/code-reaper/codereaper"
+      "cwd": "codereaper"
     }
   }
 }
