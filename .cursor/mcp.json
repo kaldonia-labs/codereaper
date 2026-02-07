@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "codereaper": {
+      "command": "python3",
+      "args": ["-m", "codereaper.mcp"],
+      "cwd": "/Users/nursultansagyntay/Documents/repos/kaldonia"
+    }
+  }
+}

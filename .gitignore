@@ -4,7 +4,39 @@
 # Node
 node_modules/
 npm-debug.log
+yarn-debug.log*
+yarn-error.log*
 yarn.lock
+pnpm-lock.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+.env.*
+.pytest_cache/
+.mypy_cache/
+
+# Build
+dist/
+build/
+.next/
+
+# IDE
+.vscode/
+.idea/
+# OS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log
+yarn.lock
+<<<<<<< HEAD
 
 # Python / Django / Flask
 __pycache__/
@@ -12,6 +44,19 @@ __pycache__/
 .env
 venv/
 .env.local
+=======
+package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.env
+.env.local
+venv/
+.venv/
+>>>>>>> 98c270b (feat: refactor into installable MCP + REST package)
 
 # Build
 dist/
@@ -21,3 +66,10 @@ build/
 .vscode/
 .idea/
 
+<<<<<<< HEAD
+=======
+# Data / runtime
+data/
+*.db
+
+>>>>>>> 98c270b (feat: refactor into installable MCP + REST package)

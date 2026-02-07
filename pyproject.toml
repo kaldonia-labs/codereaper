@@ -1,0 +1,66 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "codereaper"
+version = "0.1.0"
+description = "AI-driven JavaScript dead code elimination via browser agent + V8 coverage"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+keywords = ["dead-code", "javascript", "coverage", "mcp", "cursor", "browser-agent"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Quality Assurance",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+dependencies = [
+    "fastmcp>=2.0.0",
+    "aiosqlite>=0.20.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "httpx>=0.28.0",
+    "lmnr-index>=0.1.0",
+    "playwright>=1.49.0",
+]
+
+[project.optional-dependencies]
+api = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "sse-starlette>=2.2.0",
+]
+all = [
+    "codereaper[api]",
+    "lmnr[all]>=0.5.0",
+    "typer>=0.15.0",
+    "rich>=13.9.0",
+]
+
+[project.scripts]
+codereaper = "codereaper.mcp:main"
+codereaper-mcp = "codereaper.mcp:main"
+codereaper-api = "codereaper.api:main"
+
+[project.urls]
+Homepage = "https://github.com/kaldonia/codereaper"
+Repository = "https://github.com/kaldonia/codereaper"
+
+[tool.hatch.build.targets.wheel]
+packages = ["codereaper"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "data/",
+    "test_site/",
+    "bin/",
+    ".cursor/",
+    ".env",
+    "*.db",
+    "package.json",
+]
