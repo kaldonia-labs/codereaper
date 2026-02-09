@@ -30,7 +30,7 @@ class Settings(BaseSettings):
 
     # ── Index Agent ─────────────────────────────────────────────────────
     index_llm_provider: str = "gemini"
-    index_llm_model: str = "gemini-2.5-flash"
+    index_llm_model: str = "gemini-3.0-flash"
     index_max_steps: int = 100
     index_viewport_width: int = 1920
     index_viewport_height: int = 1080

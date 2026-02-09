@@ -92,7 +92,7 @@ def _ensure_cursor_mcp_config() -> None:
         entry["env"] = env
 
     env.setdefault("CODEREAPER_INDEX_LLM_PROVIDER", "gemini")
-    env.setdefault("CODEREAPER_INDEX_LLM_MODEL", "gemini-2.5-flash")
+    env.setdefault("CODEREAPER_INDEX_LLM_MODEL", "gemini-3.0-flash")
     env["GEMINI_API_KEY"] = api_key
     env.setdefault("GOOGLE_API_KEY", api_key)
 
