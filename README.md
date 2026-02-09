@@ -25,9 +25,6 @@ When you first run `codereaper`, it prompts for your Gemini API key and saves it
 ```bash
 # pipx
 pipx run codereaper
-
-# npm
-npx codereaper
 ```
 
 ## Prerequisites
