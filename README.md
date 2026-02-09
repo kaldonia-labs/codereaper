@@ -1,142 +1,61 @@
 # CodeReaper
 
-AI-driven Cursor MCP JavaScript dead code elimination for websites.
+CodeReaper is an AI-driven MCP tool for Cursor that finds and removes dead JavaScript by exploring real UIs and capturing V8 coverage.
 
-It's added to Cursor as MCP using pip install codereaper. CodeReaper scans a target URL or unpacked Chrome extension, autonomously explores the UI via the [Index](https://github.com/lmnr-ai/index) browser agent, collects V8 precise coverage data, and produces verified unified diffs that safely remove dead code.
+## Key Features
 
-## Install
+- Autonomous UI exploration via the Index browser agent
+- V8 precise coverage to identify zero-execution functions
+- Risk scoring and removal recommendations
+- Patch generation and optional verification replay
+- MCP integration for Cursor workflows
 
-### pip / pipx (recommended)
+## Quick Install
 
 ```bash
 pip install codereaper
 playwright install chromium
+codereaper
 ```
 
-Or with zero-install via pipx:
+When you first run `codereaper`, it prompts for your Gemini API key and saves it in your global `~/.cursor/mcp.json` so Cursor can invoke it later.
+
+## Alternative Install
 
 ```bash
-pipx run codereaper          # starts MCP server directly
+# pipx
+pipx run codereaper
+
+# npm
+npx codereaper
 ```
 
-### npm / npx
+## Prerequisites
+
+- Python 3.11+
+- Playwright Chromium (installed via `playwright install chromium`)
+- A Gemini API key (or OpenAI / Anthropic if you change providers)
+
+## Quick Start
+
+1. Install and run `codereaper` (it updates `~/.cursor/mcp.json`)
+2. Restart Cursor
+3. Ask the assistant:
+   > "Find dead JavaScript code on http://localhost:3000"
+
+## Usage
+
+Command:
 
 ```bash
-npx codereaper               # auto-detects uvx/pipx/python
+codereaper
 ```
 
-### From source
-
-```bash
-git clone https://github.com/kaldonia-labs/codereaper.git
-cd codereaper
-pip install -e .
-playwright install chromium
-```
-
-## Landing
-
-Codereaper Landing [codereaper.vercel.app](https://codereaper.vercel.app/)  
-See what codereaper is!
-
-## Configure
-
-Create a `.env` file in the project root (or set environment variables):
-
-```env
-# LLM for Index browser agent
-CODEREAPER_INDEX_LLM_PROVIDER=gemini
-CODEREAPER_INDEX_LLM_MODEL=gemini-2.5-pro-preview-05-06
-GOOGLE_API_KEY=your-key-here
-
-# Or use OpenAI / Anthropic
-# CODEREAPER_INDEX_LLM_PROVIDER=openai
-# CODEREAPER_INDEX_LLM_MODEL=gpt-4o
-# OPENAI_API_KEY=your-key-here
-
-# Storage (optional, defaults shown)
-CODEREAPER_DATA_DIR=./data
-CODEREAPER_DB_PATH=./data/codereaper.db
-```
-
-## Cursor MCP Integration
-
-CodeReaper runs as an MCP (Model Context Protocol) server that Cursor invokes to scan websites, find dead code, and suggest what to delete.
-
-### Add to Cursor
-
-Add one of these to your `.cursor/mcp.json`:
-
-**If installed via pip:**
-
-```json
-{
-  "mcpServers": {
-    "codereaper": {
-      "command": "codereaper"
-    }
-  }
-}
-```
-
-**If using pipx (zero-install):**
-
-```json
-{
-  "mcpServers": {
-    "codereaper": {
-      "command": "pipx",
-      "args": ["run", "codereaper"]
-    }
-  }
-}
-```
-
-**If using npx (zero-install):**
-
-```json
-{
-  "mcpServers": {
-    "codereaper": {
-      "command": "npx",
-      "args": ["-y", "codereaper"]
-    }
-  }
-}
-```
-
-**From source (development):**
-
-```json
-{
-  "mcpServers": {
-    "codereaper": {
-      "command": "python3",
-      "args": ["-m", "codereaper.mcp"],
-      "cwd": "/absolute/path/to/codereaper"
-    }
-  }
-}
-```
-
-Restart Cursor after editing `mcp.json`.
-
-### Usage in Cursor
-
-Ask the assistant to find dead code:
-
-> "Find dead JavaScript code on http://localhost:3000"
-
-The assistant calls `find_dead_code` which:
-1. Launches a browser with an AI agent that explores the site
-2. Collects V8 code coverage showing which functions executed
-3. Returns a report of every function with zero executions
-
-Provide a local source directory so the report maps URLs to local files:
+Example scan with local source mapping:
 
 > "Find dead code on http://localhost:3000, source is in ./test_site"
 
-### MCP Tools
+## MCP Tools
 
 | Tool | Description |
 |------|-------------|
@@ -151,78 +70,17 @@ Provide a local source directory so the report maps URLs to local files:
 | `list_scans` | List recent scans. |
 | `get_scan_status` | Get detailed status of a scan. |
 
-## Architecture
+## Troubleshooting
 
-```
-Cursor / AI assistant
-        |
-   MCP Server (stdio)
-   (codereaper.mcp)
-        |
-   Services Layer
-   (scanner, analyzer, patcher, verifier)
-        |               |
-  Index Browser Agent  V8 CDP Coverage
-  (autonomous UI       (precise per-function
-   exploration)         execution counts)
-```
+- If the browser doesn’t open, install Chromium: `playwright install chromium`
+- If the scan fails with key errors, ensure `GEMINI_API_KEY` exists in `~/.cursor/mcp.json`
+- If local pages don’t load, confirm your dev server is running and reachable
+- If Gemini rate limits hit, retry after the quota window resets
 
-## Pipeline
+## Update
 
-| Phase | Description |
-|-------|-------------|
-| 1. Scan & Explore | Launch Index agent to autonomously interact with all UI surfaces while collecting V8 coverage |
-| 2. Analyze | Map coverage ranges to functions, classify executed vs. unexecuted, detect dynamic references |
-| 3. Patch | Generate unified diffs with rationale and risk scores |
-| 4. Verify | Replay the original interaction plan against patched code, detect regressions |
-| 5. Rollback | Restore original files from pre-patch snapshots |
+- 02-09-2026: v0.2.3 release
 
-## Project Structure
+## Issues & Feedback
 
-```
-codereaper/
-├── __main__.py              # python -m codereaper -> MCP server
-├── mcp/                     # MCP server for Cursor
-│   ├── __init__.py          # main() entry point
-│   ├── __main__.py          # python -m codereaper.mcp
-│   └── server.py            # FastMCP tool definitions
-├── services/                # Business logic
-│   ├── scanner.py           # Index agent orchestration + CDP coverage
-│   ├── analyzer.py          # Coverage mapping + dead code detection
-│   ├── patcher.py           # Diff generation + application + rollback
-│   └── verifier.py          # Replay + regression detection
-├── models/
-│   ├── schemas.py           # Pydantic request/response models
-│   └── enums.py             # Status, risk, safety enums
-├── core/
-│   ├── config.py            # Settings via pydantic-settings
-│   └── storage.py           # SQLite + filesystem artifact storage
-└── tests/
-
-bin/cli.mjs                  # npx wrapper (spawns uvx/pipx/python)
-pyproject.toml               # Python packaging (pip install codereaper)
-package.json                 # npm packaging (npx codereaper)
-```
-
-
-
-
-## Governance (Unbound)
-
-We integrate Unbound as a governance layer for AI coding agents in Cursor.
-Cursor routes LLM traffic (Gemini) through Unbound’s gateway, enabling monitoring
-and policy guardrails during MCP tool usage.
-
-
-
-## Tech Stack
-
-- **MCP Server**: FastMCP
-- **Validation**: Pydantic v2
-- **Storage**: aiosqlite + filesystem
-- **Browser**: Playwright (via Index agent)
-- **Coverage**: V8 CDP Profiler domain
-- **Diff**: Python `difflib`
-
-
-
+Open an issue with steps to reproduce and logs if possible. Feedback and suggestions are welcome.

@@ -24,6 +24,7 @@ build/
 # IDE
 .vscode/
 .idea/
+.cursor/
 
 # Data / runtime
 data/
